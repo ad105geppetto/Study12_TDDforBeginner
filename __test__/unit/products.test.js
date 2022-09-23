@@ -28,4 +28,9 @@ describe("Product Controller Create", () => {
     expect(res.statusCode).toBe(201);
     expect(res._isEndCalled()).toBeTruthy();
   });
+  it("Should return json body in response", () => {
+    productModel.create.mockReturnValue(newProduct);
+    productController.createProduct(req, res, next);
+    expect(res._getJSONData()).toStrictEqual(newProduct);
+  });
 });
