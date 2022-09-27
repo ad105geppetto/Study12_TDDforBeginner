@@ -8,3 +8,10 @@ it("POST /api/products", async () => {
   expect(response.body.name).toBe(newProduct.name);
   expect(response.body.description).toBe(newProduct.description);
 });
+
+it("Should return 500 on POST /api/products", async () => {
+  const response = await request(app)
+    .post("/api/products")
+    .send({ name: "phone" });
+  expect(response.statusCode).toBe(500);
+});
