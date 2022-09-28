@@ -4,6 +4,7 @@ const httpMocks = require("node-mocks-http");
 const newProduct = require("../data/new-product.json");
 
 productModel.create = jest.fn();
+productModel.find = jest.fn();
 
 let req, res, next;
 beforeEach(() => {
@@ -45,5 +46,9 @@ describe("Product Controller Create", () => {
 describe("Product Controller Get", () => {
   it("Should have a getProduct function", () => {
     expect(typeof productController.getProduct).toBe("function");
+  });
+  it("Should call ProductModel.find({})", async () => {
+    await productController.getProduct(req, res, next);
+    expect(productModel.find).toHaveBeenCalledWith({});
   });
 });

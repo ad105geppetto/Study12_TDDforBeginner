@@ -9,4 +9,6 @@ exports.createProduct = async (req, res, next) => {
   }
 };
 
-exports.getProduct = async (req, res, next) => {};
+exports.getProduct = async (req, res, next) => {
+  await productModel.find({});
+};
