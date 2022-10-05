@@ -3,10 +3,12 @@ const productModel = require("../../models/products");
 const httpMocks = require("node-mocks-http");
 const newProduct = require("../data/new-product.json");
 const allProducts = require("../data/all-products.json");
+const updatedProduct = require("../data/updated-product.json");
 
 productModel.create = jest.fn();
 productModel.find = jest.fn();
 productModel.findById = jest.fn();
+productModel.findByIdAndUpdate = jest.fn();
 
 const productId = "productId";
 let req, res, next;
@@ -100,6 +102,46 @@ describe("Product Controller GetById", () => {
     const rejectedPromise = Promise.reject(errorMessage);
     productModel.findById.mockReturnValue(rejectedPromise);
     await productController.getProductById(req, res, next);
+    expect(next).toHaveBeenCalledWith(errorMessage);
+  });
+});
+
+describe("Product Controller UpdateById", () => {
+  it("Should have a updateProductById function", () => {
+    expect(typeof productController.updateProduct).toBe("function");
+  });
+  it("Should call productModel.findByIdAndUpdate", async () => {
+    req.params.productId = productId;
+    req.body = updatedProduct;
+    await productController.updateProduct(req, res, next);
+    expect(productModel.findByIdAndUpdate).toHaveBeenCalledWith(
+      productId,
+      updatedProduct,
+      { new: true }
+    );
+  });
+  it("Should return json body and response code 200", async () => {
+    req.params.productId = productId;
+    req.body = updatedProduct;
+    productModel.findByIdAndUpdate.mockReturnValue(updatedProduct);
+    await productController.updateProduct(req, res, next);
+    expect(res.statusCode).toBe(200);
+    expect(res._isEndCalled()).toBeTruthy();
+    expect(res._getJSONData()).toStrictEqual(updatedProduct);
+  });
+  it("Should return 404 when item doesn't exist", async () => {
+    req.params.productId = productId;
+    req.body = updatedProduct;
+    productModel.findByIdAndUpdate.mockReturnValue(null);
+    await productController.updateProduct(req, res, next);
+    expect(res.statusCode).toBe(404);
+    expect(res._isEndCalled()).toBeTruthy();
+  });
+  it("Should handle errors", async () => {
+    const errorMessage = { message: "error" };
+    const rejectedPromise = Promise.reject(errorMessage);
+    productModel.findByIdAndUpdate.mockReturnValue(rejectedPromise);
+    await productController.updateProduct(req, res, next);
     expect(next).toHaveBeenCalledWith(errorMessage);
   });
 });
