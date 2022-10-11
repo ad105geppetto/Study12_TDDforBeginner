@@ -75,3 +75,19 @@ it("PATCH id doesn't exist /api/products/:productId", async () => {
     .send(updatedProduct);
   expect(response.statusCode).toBe(404);
 });
+
+it("DELETE /api/products/:productId", async () => {
+  const response = await request(app).delete(
+    `/api/products/${firstProduct._id}`
+  );
+  expect(response.statusCode).toBe(200);
+  expect(response.body.name).toBe(firstProduct.name);
+  expect(response.body.description).toBe(firstProduct.description);
+});
+
+it("DELETE id doesn't exist /api/products/:productId", async () => {
+  const response = await request(app).delete(
+    `/api/products/${firstProduct._id.slice(0, firstProduct._id.length - 2)}44`
+  );
+  expect(response.statusCode).toBe(404);
+});
