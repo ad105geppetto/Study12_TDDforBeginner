@@ -154,9 +154,7 @@ describe("Product Controller Delete", () => {
   it("Should call productModel.findByIdAndUpdate", async () => {
     req.params.productId = productId;
     await productController.deleteProduct(req, res, next);
-    expect(productModel.findByIdAndDelete).toHaveBeenCalledWith(productId, {
-      new: true,
-    });
+    expect(productModel.findByIdAndDelete).toHaveBeenCalledWith(productId);
   });
   it("Should return json body and response code 200", async () => {
     req.params.productId = productId;
