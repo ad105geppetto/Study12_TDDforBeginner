@@ -58,7 +58,6 @@ exports.deleteProduct = async (req, res, next) => {
     );
 
     if (deleteProduct) {
-      console.log(deleteProduct);
       res.status(200).json(deleteProduct);
     } else {
       res.status(404).send();

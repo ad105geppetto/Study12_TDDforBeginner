@@ -60,7 +60,6 @@ it("PATCH /api/products/:productId", async () => {
     : firstProduct.price;
   expect(response.statusCode).toBe(200);
   expect(response.body.name).toBe(firstProduct.name);
-  console.log(response.body.description);
   expect(response.body.description).toBe(firstProduct.description);
 });
 
